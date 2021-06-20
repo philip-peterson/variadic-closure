@@ -7,16 +7,14 @@ pub struct Closure<A, B, C, D, E, F, RET> {
 fn too_many(a: usize, b: usize) -> String {
     format!(
         "Too many arguments provided to closure (expected: {}, provided: {})",
-        a,
-        b
+        a, b
     )
 }
 
 fn too_few(a: usize, b: usize) -> String {
     format!(
         "Too few arguments provided to closure (expected: {}, provided: {})",
-        a,
-        b
+        a, b
     )
 }
 
@@ -27,7 +25,7 @@ impl<A, B, C, D, E, F, RET> Closure<A, B, C, D, E, F, RET> {
         match &self.variant {
             ClosureVariant::Zero(clos) => (*clos.wrapped)(),
             _ => {
-                panic!(too_few(self.variant.arity(), provided))
+                panic!("{}", too_few(self.variant.arity(), provided))
             }
         }
     }
@@ -37,11 +35,11 @@ impl<A, B, C, D, E, F, RET> Closure<A, B, C, D, E, F, RET> {
 
         match &self.variant {
             ClosureVariant::Zero(_) => {
-                panic!(too_many(self.variant.arity(), provided))
+                panic!("{}", too_many(self.variant.arity(), provided))
             }
             ClosureVariant::One(clos) => (*clos.wrapped)(a),
             _ => {
-                panic!(too_few(self.variant.arity(), provided))
+                panic!("{}", too_few(self.variant.arity(), provided))
             }
         }
     }
@@ -50,13 +48,12 @@ impl<A, B, C, D, E, F, RET> Closure<A, B, C, D, E, F, RET> {
         let provided = 2;
 
         match &self.variant {
-            ClosureVariant::Zero(_) |
-            ClosureVariant::One(_) => {
-                panic!(too_many(self.variant.arity(), provided))
+            ClosureVariant::Zero(_) | ClosureVariant::One(_) => {
+                panic!("{}", too_many(self.variant.arity(), provided))
             }
             ClosureVariant::Two(clos) => (*clos.wrapped)(a, b),
             _ => {
-                panic!(too_few(self.variant.arity(), provided))
+                panic!("{}", too_few(self.variant.arity(), provided))
             }
         }
     }
@@ -65,14 +62,12 @@ impl<A, B, C, D, E, F, RET> Closure<A, B, C, D, E, F, RET> {
         let provided = 3;
 
         match &self.variant {
-            ClosureVariant::Zero(_) |
-            ClosureVariant::One(_) |
-            ClosureVariant::Two(_) => {
-                panic!(too_many(self.variant.arity(), provided))
+            ClosureVariant::Zero(_) | ClosureVariant::One(_) | ClosureVariant::Two(_) => {
+                panic!("{}", too_many(self.variant.arity(), provided))
             }
             ClosureVariant::Three(clos) => (*clos.wrapped)(a, b, c),
             _ => {
-                panic!(too_few(self.variant.arity(), provided))
+                panic!("{}", too_few(self.variant.arity(), provided))
             }
         }
     }
@@ -81,15 +76,15 @@ impl<A, B, C, D, E, F, RET> Closure<A, B, C, D, E, F, RET> {
         let provided = 4;
 
         match &self.variant {
-            ClosureVariant::Zero(_) |
-            ClosureVariant::One(_) |
-            ClosureVariant::Two(_) |
-            ClosureVariant::Three(_) => {
-                panic!(too_many(self.variant.arity(), provided))
+            ClosureVariant::Zero(_)
+            | ClosureVariant::One(_)
+            | ClosureVariant::Two(_)
+            | ClosureVariant::Three(_) => {
+                panic!("{}", too_many(self.variant.arity(), provided))
             }
             ClosureVariant::Four(clos) => (*clos.wrapped)(a, b, c, d),
             _ => {
-                panic!(too_few(self.variant.arity(), provided))
+                panic!("{}", too_few(self.variant.arity(), provided))
             }
         }
     }
@@ -98,16 +93,16 @@ impl<A, B, C, D, E, F, RET> Closure<A, B, C, D, E, F, RET> {
         let provided = 5;
 
         match &self.variant {
-            ClosureVariant::Zero(_) |
-            ClosureVariant::One(_) |
-            ClosureVariant::Two(_) |
-            ClosureVariant::Three(_) |
-            ClosureVariant::Four(_) => {
-                panic!(too_many(self.variant.arity(), provided))
+            ClosureVariant::Zero(_)
+            | ClosureVariant::One(_)
+            | ClosureVariant::Two(_)
+            | ClosureVariant::Three(_)
+            | ClosureVariant::Four(_) => {
+                panic!("{}", too_many(self.variant.arity(), provided))
             }
             ClosureVariant::Five(clos) => (*clos.wrapped)(a, b, c, d, e),
             _ => {
-                panic!(too_few(self.variant.arity(), provided))
+                panic!("{}", too_few(self.variant.arity(), provided))
             }
         }
     }
@@ -116,18 +111,15 @@ impl<A, B, C, D, E, F, RET> Closure<A, B, C, D, E, F, RET> {
         let provided = 6;
 
         match &self.variant {
-            ClosureVariant::Zero(_) |
-            ClosureVariant::One(_) |
-            ClosureVariant::Two(_) |
-            ClosureVariant::Three(_) |
-            ClosureVariant::Four(_) |
-            ClosureVariant::Five(_) => {
-                panic!(too_many(self.variant.arity(), provided))
+            ClosureVariant::Zero(_)
+            | ClosureVariant::One(_)
+            | ClosureVariant::Two(_)
+            | ClosureVariant::Three(_)
+            | ClosureVariant::Four(_)
+            | ClosureVariant::Five(_) => {
+                panic!("{}", too_many(self.variant.arity(), provided))
             }
             ClosureVariant::Six(clos) => (*clos.wrapped)(a, b, c, d, e, f),
-            _ => {
-                panic!(too_few(self.variant.arity(), provided))
-            }
         }
     }
 }
@@ -222,29 +214,150 @@ macro_rules! variadic_closure {
             }),
         }
     };
-    ( fn $fn:ident ( $arg1: ident : $argty1:ty  ) -> $ret:ty $body:block ) => {
-
+    ( fn $fn:ident (
+        $arg1: ident : $argty1:ty
+    ) -> $ret:ty $body:block ) => {
+        $crate::Closure {
+            variant: $crate::ClosureVariant::One::<$argty1, (), (), (), (), (), $ret>($crate::Closure1 {
+                wrapped: Box::new(|$arg1 : $argty1| -> $ret { $body }),
+                _a: ::std::marker::PhantomData,
+                _ret: ::std::marker::PhantomData
+            }),
+        }
+    };
+    ( fn $fn:ident (
+        $arg1: ident : $argty1:ty,
+        $arg2: ident : $argty2:ty
+    ) -> $ret:ty $body:block ) => {
+        $crate::Closure {
+            variant: $crate::ClosureVariant::Two::<$argty1, $argty2, (), (), (), (), $ret>($crate::Closure2 {
+                wrapped: Box::new(|$arg1 : $argty1 , $arg2: $argty2| -> $ret { $body }),
+                _a: ::std::marker::PhantomData,
+                _b: ::std::marker::PhantomData,
+                _ret: ::std::marker::PhantomData
+            }),
+        }
+    };
+    ( fn $fn:ident (
+        $arg1: ident : $argty1:ty,
+        $arg2: ident : $argty2:ty,
+        $arg3: ident : $argty3:ty
+    ) -> $ret:ty $body:block ) => {
+        $crate::Closure {
+            variant: $crate::ClosureVariant::Three::<$argty1, $argty2, $argty3, (), (), (), $ret>($crate::Closure3 {
+                wrapped: Box::new(|$arg1 : $argty1 , $arg2: $argty2, $arg3 : $argty3| -> $ret { $body }),
+                _a: ::std::marker::PhantomData,
+                _b: ::std::marker::PhantomData,
+                _c: ::std::marker::PhantomData,
+                _ret: ::std::marker::PhantomData
+            }),
+        }
+    };
+    ( fn $fn:ident (
+        $arg1: ident : $argty1:ty,
+        $arg2: ident : $argty2:ty,
+        $arg3: ident : $argty3:ty,
+        $arg4: ident : $argty4:ty
+    ) -> $ret:ty $body:block ) => {
+        $crate::Closure {
+            variant: $crate::ClosureVariant::Four::<$argty1, $argty2, $argty3, $argty4, (), (), $ret>($crate::Closure4 {
+                wrapped: Box::new(|$arg1 : $argty1 , $arg2: $argty2, $arg3 : $argty3, $arg4 : $argty4| -> $ret { $body }),
+                _a: ::std::marker::PhantomData,
+                _b: ::std::marker::PhantomData,
+                _c: ::std::marker::PhantomData,
+                _d: ::std::marker::PhantomData,
+                _ret: ::std::marker::PhantomData
+            }),
+        }
+    };
+    ( fn $fn:ident (
+        $arg1: ident : $argty1:ty,
+        $arg2: ident : $argty2:ty,
+        $arg3: ident : $argty3:ty,
+        $arg4: ident : $argty4:ty,
+        $arg5: ident : $argty5:ty
+    ) -> $ret:ty $body:block ) => {
+        $crate::Closure {
+            variant: $crate::ClosureVariant::Five::<$argty1, $argty2, $argty3, $argty4, $argty5, (), $ret>($crate::Closure5 {
+                wrapped: Box::new(|$arg1 : $argty1 , $arg2: $argty2, $arg3 : $argty3, $arg4 : $argty4, $arg5 : $argty5| -> $ret { $body }),
+                _a: ::std::marker::PhantomData,
+                _b: ::std::marker::PhantomData,
+                _c: ::std::marker::PhantomData,
+                _d: ::std::marker::PhantomData,
+                _e: ::std::marker::PhantomData,
+                _ret: ::std::marker::PhantomData
+            }),
+        }
+    };
+    ( fn $fn:ident (
+        $arg1: ident : $argty1:ty,
+        $arg2: ident : $argty2:ty,
+        $arg3: ident : $argty3:ty,
+        $arg4: ident : $argty4:ty,
+        $arg5: ident : $argty5:ty,
+        $arg6: ident : $argty6:ty
+    ) -> $ret:ty $body:block ) => {
+        $crate::Closure {
+            variant: $crate::ClosureVariant::Six::<$argty1, $argty2, $argty3, $argty4, $argty5, $argty6, $ret>($crate::Closure6 {
+                wrapped: Box::new(|$arg1 : $argty1 , $arg2: $argty2, $arg3 : $argty3, $arg4 : $argty4, $arg5 : $argty5, $arg6 : $argty6| -> $ret { $body }),
+                _a: ::std::marker::PhantomData,
+                _b: ::std::marker::PhantomData,
+                _c: ::std::marker::PhantomData,
+                _d: ::std::marker::PhantomData,
+                _e: ::std::marker::PhantomData,
+                _f: ::std::marker::PhantomData,
+                _ret: ::std::marker::PhantomData
+            }),
+        }
     };
 }
 
 #[cfg(test)]
 mod tests {
-    use cool_asserts;
     #[test]
-    fn it_works() {
+    fn it_works_0_args() {
         let stored_closure = variadic_closure! {
             fn foo() -> isize {
                 3
             }
         };
         let result = stored_closure.call0();
+
         assert_eq!(result, 3);
     }
 
     #[test]
+    fn it_works_1_args() {
+        let stored_closure = variadic_closure! {
+            fn foo(a: i8) -> i32 {
+                a as i32
+            }
+        };
+        let result = stored_closure.call1(9);
+
+        assert_eq!(result, 9);
+    }
+
+    #[test]
+    fn it_works_5_args() {
+        let stored_closure = variadic_closure! {
+            fn foo(a: i8, b: (), c: (), d: (), e: i32, f: i8) -> i32 {
+                a as i32 + e + f as i32
+            }
+        };
+        let result = stored_closure.call6(1, (), (), (), 4, 3);
+
+        assert_eq!(result, 8);
+    }
+
+    #[test]
     #[should_panic]
-    fn test_closure0_panics_too_many_args_1() {
-        
+    fn it_panics_wrong_args() {
+        let stored_closure = variadic_closure! {
+            fn foo() -> isize {
+                3
+            }
+        };
+        stored_closure.call1(());
     }
 }
-
