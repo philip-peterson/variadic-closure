@@ -1,9 +1,9 @@
 [package]
 name = "variadic_closure"
-version = "1.0.0"
+version = "1.0.1"
 edition = "2018"
 description = "Support for dynamically created and called closures with variable number of arguments"
-repository = "https://github.com/philip-peterson/rust-rdom/"
+repository = "https://github.com/philip-peterson/variadic-closure"
 authors = ["Philip Peterson <philip.c.peterson@gmail.com>"]
 license = "MIT"
 
