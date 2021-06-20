@@ -1,5 +1,3 @@
-use std::marker::PhantomData;
-
 pub struct Closure<A, B, C, D, E, F, RET> {
     variant: ClosureVariant<A, B, C, D, E, F, RET>,
 }
