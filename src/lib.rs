@@ -341,7 +341,7 @@ mod tests {
     #[test]
     fn it_works_5_args() {
         let stored_closure = variadic_closure! {
-            fn foo(a: i8, b: (), c: (), d: (), e: i32, f: i8) -> i32 {
+            fn foo(a: i8, _b: (), _c: (), _d: (), e: i32, f: i8) -> i32 {
                 a as i32 + e + f as i32
             }
         };
