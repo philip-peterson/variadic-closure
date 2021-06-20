@@ -150,58 +150,30 @@ impl<A, B, C, D, E, F, RET> ClosureVariant<A, B, C, D, E, F, RET> {
 
 pub struct Closure0<RET> {
     wrapped: Box<dyn Fn() -> RET>,
-    _ret: PhantomData<RET>,
 }
 
 pub struct Closure1<A, RET> {
     wrapped: Box<dyn Fn(A) -> RET>,
-    _a: PhantomData<A>,
-    _ret: PhantomData<RET>,
 }
 
 pub struct Closure2<A, B, RET> {
     wrapped: Box<dyn Fn(A, B) -> RET>,
-    _a: PhantomData<A>,
-    _b: PhantomData<B>,
-    _ret: PhantomData<RET>,
 }
 
 pub struct Closure3<A, B, C, RET> {
     wrapped: Box<dyn Fn(A, B, C) -> RET>,
-    _a: PhantomData<A>,
-    _b: PhantomData<B>,
-    _c: PhantomData<C>,
-    _ret: PhantomData<RET>,
 }
 
 pub struct Closure4<A, B, C, D, RET> {
     wrapped: Box<dyn Fn(A, B, C, D) -> RET>,
-    _a: PhantomData<A>,
-    _b: PhantomData<B>,
-    _c: PhantomData<C>,
-    _d: PhantomData<D>,
-    _ret: PhantomData<RET>,
 }
 
 pub struct Closure5<A, B, C, D, E, RET> {
     wrapped: Box<dyn Fn(A, B, C, D, E) -> RET>,
-    _a: PhantomData<A>,
-    _b: PhantomData<B>,
-    _c: PhantomData<C>,
-    _d: PhantomData<D>,
-    _e: PhantomData<E>,
-    _ret: PhantomData<RET>,
 }
 
 pub struct Closure6<A, B, C, D, E, F, RET> {
     wrapped: Box<dyn Fn(A, B, C, D, E, F) -> RET>,
-    _a: PhantomData<A>,
-    _b: PhantomData<B>,
-    _c: PhantomData<C>,
-    _d: PhantomData<D>,
-    _e: PhantomData<E>,
-    _f: PhantomData<F>,
-    _ret: PhantomData<RET>,
 }
 
 #[macro_export]
@@ -210,7 +182,6 @@ macro_rules! variadic_closure {
         $crate::Closure {
             variant: $crate::ClosureVariant::Zero::<(), (), (), (), (), (), $ret>($crate::Closure0 {
                 wrapped: Box::new(|| -> $ret { $body }),
-                _ret: ::std::marker::PhantomData
             }),
         }
     };
@@ -220,8 +191,6 @@ macro_rules! variadic_closure {
         $crate::Closure {
             variant: $crate::ClosureVariant::One::<$argty1, (), (), (), (), (), $ret>($crate::Closure1 {
                 wrapped: Box::new(|$arg1 : $argty1| -> $ret { $body }),
-                _a: ::std::marker::PhantomData,
-                _ret: ::std::marker::PhantomData
             }),
         }
     };
@@ -232,9 +201,6 @@ macro_rules! variadic_closure {
         $crate::Closure {
             variant: $crate::ClosureVariant::Two::<$argty1, $argty2, (), (), (), (), $ret>($crate::Closure2 {
                 wrapped: Box::new(|$arg1 : $argty1 , $arg2: $argty2| -> $ret { $body }),
-                _a: ::std::marker::PhantomData,
-                _b: ::std::marker::PhantomData,
-                _ret: ::std::marker::PhantomData
             }),
         }
     };
@@ -246,10 +212,6 @@ macro_rules! variadic_closure {
         $crate::Closure {
             variant: $crate::ClosureVariant::Three::<$argty1, $argty2, $argty3, (), (), (), $ret>($crate::Closure3 {
                 wrapped: Box::new(|$arg1 : $argty1 , $arg2: $argty2, $arg3 : $argty3| -> $ret { $body }),
-                _a: ::std::marker::PhantomData,
-                _b: ::std::marker::PhantomData,
-                _c: ::std::marker::PhantomData,
-                _ret: ::std::marker::PhantomData
             }),
         }
     };
@@ -262,11 +224,6 @@ macro_rules! variadic_closure {
         $crate::Closure {
             variant: $crate::ClosureVariant::Four::<$argty1, $argty2, $argty3, $argty4, (), (), $ret>($crate::Closure4 {
                 wrapped: Box::new(|$arg1 : $argty1 , $arg2: $argty2, $arg3 : $argty3, $arg4 : $argty4| -> $ret { $body }),
-                _a: ::std::marker::PhantomData,
-                _b: ::std::marker::PhantomData,
-                _c: ::std::marker::PhantomData,
-                _d: ::std::marker::PhantomData,
-                _ret: ::std::marker::PhantomData
             }),
         }
     };
@@ -280,12 +237,6 @@ macro_rules! variadic_closure {
         $crate::Closure {
             variant: $crate::ClosureVariant::Five::<$argty1, $argty2, $argty3, $argty4, $argty5, (), $ret>($crate::Closure5 {
                 wrapped: Box::new(|$arg1 : $argty1 , $arg2: $argty2, $arg3 : $argty3, $arg4 : $argty4, $arg5 : $argty5| -> $ret { $body }),
-                _a: ::std::marker::PhantomData,
-                _b: ::std::marker::PhantomData,
-                _c: ::std::marker::PhantomData,
-                _d: ::std::marker::PhantomData,
-                _e: ::std::marker::PhantomData,
-                _ret: ::std::marker::PhantomData
             }),
         }
     };
@@ -300,13 +251,6 @@ macro_rules! variadic_closure {
         $crate::Closure {
             variant: $crate::ClosureVariant::Six::<$argty1, $argty2, $argty3, $argty4, $argty5, $argty6, $ret>($crate::Closure6 {
                 wrapped: Box::new(|$arg1 : $argty1 , $arg2: $argty2, $arg3 : $argty3, $arg4 : $argty4, $arg5 : $argty5, $arg6 : $argty6| -> $ret { $body }),
-                _a: ::std::marker::PhantomData,
-                _b: ::std::marker::PhantomData,
-                _c: ::std::marker::PhantomData,
-                _d: ::std::marker::PhantomData,
-                _e: ::std::marker::PhantomData,
-                _f: ::std::marker::PhantomData,
-                _ret: ::std::marker::PhantomData
             }),
         }
     };
