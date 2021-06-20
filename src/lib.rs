@@ -19,6 +19,10 @@ fn too_few(a: usize, b: usize) -> String {
 }
 
 impl<A, B, C, D, E, F, RET> Closure<A, B, C, D, E, F, RET> {
+    pub fn arity(&self) -> usize {
+        self.variant.arity()
+    }
+
     pub fn call0(&self) -> RET {
         let provided = 0;
 
@@ -135,7 +139,7 @@ pub enum ClosureVariant<A, B, C, D, E, F, RET> {
 }
 
 impl<A, B, C, D, E, F, RET> ClosureVariant<A, B, C, D, E, F, RET> {
-    fn arity(&self) -> usize {
+    pub fn arity(&self) -> usize {
         match &self {
             ClosureVariant::Zero(_) => 0,
             ClosureVariant::One(_) => 1,

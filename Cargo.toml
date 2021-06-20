@@ -1,6 +1,6 @@
 [package]
 name = "variadic_closure"
-version = "1.0.2"
+version = "1.0.3"
 edition = "2018"
 description = "Support for dynamically created and called closures with variable number of arguments"
 repository = "https://github.com/philip-peterson/variadic-closure"
