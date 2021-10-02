@@ -233,7 +233,7 @@ pub struct Closure8<A, B, C, D, E, F, G, H, RET> {
 }
 
 impl<RET> Closure<(), (), (), (), (), (), (), (), RET> {
-    fn new_with_0_args(code: Box<dyn Fn() -> RET>) -> Closure<(), (), (), (), (), (), (), (), RET> {
+    pub fn new_with_0_args(code: Box<dyn Fn() -> RET>) -> Closure<(), (), (), (), (), (), (), (), RET> {
         Closure {
             variant: ClosureVariant::Zero(Closure0 {
                 wrapped: code,
@@ -243,7 +243,7 @@ impl<RET> Closure<(), (), (), (), (), (), (), (), RET> {
 }
 
 impl<A, RET> Closure<A, (), (), (), (), (), (), (), RET> {
-    fn new_with_1_arg(code: Box<dyn Fn(A) -> RET>) -> Closure<A, (), (), (), (), (), (), (), RET> {
+    pub fn new_with_1_arg(code: Box<dyn Fn(A) -> RET>) -> Closure<A, (), (), (), (), (), (), (), RET> {
         Closure {
             variant: ClosureVariant::One(Closure1 {
                 wrapped: code,
@@ -253,7 +253,7 @@ impl<A, RET> Closure<A, (), (), (), (), (), (), (), RET> {
 }
 
 impl<A, B, RET> Closure<A, B, (), (), (), (), (), (), RET> {
-    fn new_with_2_args(code: Box<dyn Fn(A, B) -> RET>) -> Closure<A, B, (), (), (), (), (), (), RET> {
+    pub fn new_with_2_args(code: Box<dyn Fn(A, B) -> RET>) -> Closure<A, B, (), (), (), (), (), (), RET> {
         Closure {
             variant: ClosureVariant::Two(Closure2 {
                 wrapped: code,
@@ -263,7 +263,7 @@ impl<A, B, RET> Closure<A, B, (), (), (), (), (), (), RET> {
 }
 
 impl<A, B, C, RET> Closure<A, B, C, (), (), (), (), (), RET> {
-    fn new_with_3_args(code: Box<dyn Fn(A, B, C) -> RET>) -> Closure<A, B, C, (), (), (), (), (), RET> {
+    pub fn new_with_3_args(code: Box<dyn Fn(A, B, C) -> RET>) -> Closure<A, B, C, (), (), (), (), (), RET> {
         Closure {
             variant: ClosureVariant::Three(Closure3 {
                 wrapped: code,
@@ -273,7 +273,7 @@ impl<A, B, C, RET> Closure<A, B, C, (), (), (), (), (), RET> {
 }
 
 impl<A, B, C, D, RET> Closure<A, B, C, D, (), (), (), (), RET> {
-    fn new_with_4_args(code: Box<dyn Fn(A, B, C, D) -> RET>) -> Closure<A, B, C, D, (), (), (), (), RET> {
+    pub fn new_with_4_args(code: Box<dyn Fn(A, B, C, D) -> RET>) -> Closure<A, B, C, D, (), (), (), (), RET> {
         Closure {
             variant: ClosureVariant::Four(Closure4 {
                 wrapped: code,
@@ -283,7 +283,7 @@ impl<A, B, C, D, RET> Closure<A, B, C, D, (), (), (), (), RET> {
 }
 
 impl<A, B, C, D, E, RET> Closure<A, B, C, D, E, (), (), (), RET> {
-    fn new_with_5_args(code: Box<dyn Fn(A, B, C, D, E) -> RET>) -> Closure<A, B, C, D, E, (), (), (), RET> {
+    pub fn new_with_5_args(code: Box<dyn Fn(A, B, C, D, E) -> RET>) -> Closure<A, B, C, D, E, (), (), (), RET> {
         Closure {
             variant: ClosureVariant::Five(Closure5 {
                 wrapped: code,
@@ -293,7 +293,7 @@ impl<A, B, C, D, E, RET> Closure<A, B, C, D, E, (), (), (), RET> {
 }
 
 impl<A, B, C, D, E, F, RET> Closure<A, B, C, D, E, F, (), (), RET> {
-    fn new_with_6_args(code: Box<dyn Fn(A, B, C, D, E, F) -> RET>) -> Closure<A, B, C, D, E, F, (), (), RET> {
+    pub fn new_with_6_args(code: Box<dyn Fn(A, B, C, D, E, F) -> RET>) -> Closure<A, B, C, D, E, F, (), (), RET> {
         Closure {
             variant: ClosureVariant::Six(Closure6 {
                 wrapped: code,
@@ -303,7 +303,7 @@ impl<A, B, C, D, E, F, RET> Closure<A, B, C, D, E, F, (), (), RET> {
 }
 
 impl<A, B, C, D, E, F, G, RET> Closure<A, B, C, D, E, F, G, (), RET> {
-    fn new_with_7_args(code: Box<dyn Fn(A, B, C, D, E, F, G) -> RET>) -> Closure<A, B, C, D, E, F, G, (), RET> {
+    pub fn new_with_7_args(code: Box<dyn Fn(A, B, C, D, E, F, G) -> RET>) -> Closure<A, B, C, D, E, F, G, (), RET> {
         Closure {
             variant: ClosureVariant::Seven(Closure7 {
                 wrapped: code,
@@ -313,7 +313,7 @@ impl<A, B, C, D, E, F, G, RET> Closure<A, B, C, D, E, F, G, (), RET> {
 }
 
 impl<A, B, C, D, E, F, G, H, RET> Closure<A, B, C, D, E, F, G, H, RET> {
-    fn new_with_8_args(code: Box<dyn Fn(A, B, C, D, E, F, G, H) -> RET>) -> Closure<A, B, C, D, E, F, G, H, RET> {
+    pub fn new_with_8_args(code: Box<dyn Fn(A, B, C, D, E, F, G, H) -> RET>) -> Closure<A, B, C, D, E, F, G, H, RET> {
         Closure {
             variant: ClosureVariant::Eight(Closure8 {
                 wrapped: code,
