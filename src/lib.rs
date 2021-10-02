@@ -232,241 +232,108 @@ pub struct Closure8<A, B, C, D, E, F, G, H, RET> {
     wrapped: Box<dyn Fn(A, B, C, D, E, F, G, H) -> RET>,
 }
 
-#[macro_export]
-macro_rules! variadic_closure {
-    (fn $fn:ident ( ) -> $ret:ty $body:block) => {
-        $crate::Closure {
-            variant: $crate::ClosureVariant::Zero::<(), (), (), (), (), (), (), (), $ret>(
-                $crate::Closure0 {
-                    wrapped: Box::new(|| -> $ret {
-                        $body
-                    }),
-                }
-            ),
+impl<RET> Closure<(), (), (), (), (), (), (), (), RET> {
+    fn new_with_0_args(code: Box<dyn Fn() -> RET>) -> Closure<(), (), (), (), (), (), (), (), RET> {
+        Closure {
+            variant: ClosureVariant::Zero(Closure0 {
+                wrapped: code,
+            })
         }
-    };
+    }
+}
 
-    (fn $fn:ident (
-        $arg1: ident : $argty1:ty
-    ) -> $ret:ty $body:block) => {
-        $crate::Closure {
-            variant: $crate::ClosureVariant::One::<
-                $argty1,
-                (),
-                (),
-                (),
-                (),
-                (),
-                (),
-                (),
-                $ret
-            >($crate::Closure1 {
-                wrapped: Box::new(|
-                    $arg1: $argty1
-                | -> $ret {
-                    $body
-                }),
-            }),
+impl<A, RET> Closure<A, (), (), (), (), (), (), (), RET> {
+    fn new_with_1_arg(code: Box<dyn Fn(A) -> RET>) -> Closure<A, (), (), (), (), (), (), (), RET> {
+        Closure {
+            variant: ClosureVariant::One(Closure1 {
+                wrapped: code,
+            })
         }
-    };
+    }
+}
 
-    (fn $fn:ident (
-        $arg1: ident : $argty1:ty,
-        $arg2: ident : $argty2:ty
-    ) -> $ret:ty $body:block) => {
-        $crate::Closure {
-            variant: $crate::ClosureVariant::Two::<
-                $argty1,
-                $argty2,
-                (),
-                (),
-                (),
-                (),
-                (),
-                (),
-                $ret
-            >($crate::Closure2 {
-                wrapped: Box::new(|
-                    $arg1: $argty1,
-                    $arg2: $argty2
-                | -> $ret {
-                    $body
-                }),
-            }),
+impl<A, B, RET> Closure<A, B, (), (), (), (), (), (), RET> {
+    fn new_with_2_args(code: Box<dyn Fn(A, B) -> RET>) -> Closure<A, B, (), (), (), (), (), (), RET> {
+        Closure {
+            variant: ClosureVariant::Two(Closure2 {
+                wrapped: code,
+            })
         }
-    };
+    }
+}
 
-    (fn $fn:ident (
-        $arg1: ident : $argty1:ty,
-        $arg2: ident : $argty2:ty,
-        $arg3: ident : $argty3:ty
-    ) -> $ret:ty $body:block) => {
-        $crate::Closure {
-            variant: $crate::ClosureVariant::Three::<
-                $argty1,
-                $argty2,
-                $argty3,
-                (),
-                (),
-                (),
-                (),
-                (),
-                $ret
-            >($crate::Closure3 {
-                wrapped: Box::new(|
-                    $arg1: $argty1,
-                    $arg2: $argty2,
-                    $arg3: $argty3
-                | -> $ret {
-                    $body
-                }),
-            }),
+impl<A, B, C, RET> Closure<A, B, C, (), (), (), (), (), RET> {
+    fn new_with_3_args(code: Box<dyn Fn(A, B, C) -> RET>) -> Closure<A, B, C, (), (), (), (), (), RET> {
+        Closure {
+            variant: ClosureVariant::Three(Closure3 {
+                wrapped: code,
+            })
         }
-    };
+    }
+}
 
-    (fn $fn:ident (
-        $arg1: ident : $argty1:ty,
-        $arg2: ident : $argty2:ty,
-        $arg3: ident : $argty3:ty,
-        $arg4: ident : $argty4:ty
-    ) -> $ret:ty $body:block) => {
-        $crate::Closure {
-            variant: $crate::ClosureVariant::Four::<
-                $argty1,
-                $argty2,
-                $argty3,
-                $argty4,
-                (),
-                (),
-                (),
-                (),
-                $ret
-            >($crate::Closure4 {
-                wrapped: Box::new(|
-                    $arg1: $argty1,
-                    $arg2: $argty2,
-                    $arg3: $argty3,
-                    $arg4: $argty4
-                | -> $ret {
-                    $body
-                }),
-            }),
+impl<A, B, C, D, RET> Closure<A, B, C, D, (), (), (), (), RET> {
+    fn new_with_4_args(code: Box<dyn Fn(A, B, C, D) -> RET>) -> Closure<A, B, C, D, (), (), (), (), RET> {
+        Closure {
+            variant: ClosureVariant::Four(Closure4 {
+                wrapped: code,
+            })
         }
-    };
+    }
+}
 
-    (fn $fn:ident (
-        $arg1: ident : $argty1:ty,
-        $arg2: ident : $argty2:ty,
-        $arg3: ident : $argty3:ty,
-        $arg4: ident : $argty4:ty,
-        $arg5: ident : $argty5:ty
-    ) -> $ret:ty $body:block) => {
-        $crate::Closure {
-            variant: $crate::ClosureVariant::Five::<
-                $argty1,
-                $argty2,
-                $argty3,
-                $argty4,
-                $argty5,
-                (),
-                (),
-                (),
-                $ret
-            >($crate::Closure5 {
-                wrapped: Box::new(|
-                    $arg1: $argty1,
-                    $arg2: $argty2,
-                    $arg3: $argty3,
-                    $arg4: $argty4,
-                    $arg5: $argty5
-                | -> $ret {
-                    $body
-                }),
-            }),
+impl<A, B, C, D, E, RET> Closure<A, B, C, D, E, (), (), (), RET> {
+    fn new_with_5_args(code: Box<dyn Fn(A, B, C, D, E) -> RET>) -> Closure<A, B, C, D, E, (), (), (), RET> {
+        Closure {
+            variant: ClosureVariant::Five(Closure5 {
+                wrapped: code,
+            })
         }
-    };
+    }
+}
 
-    (fn $fn:ident (
-        $arg1: ident : $argty1:ty,
-        $arg2: ident : $argty2:ty,
-        $arg3: ident : $argty3:ty,
-        $arg4: ident : $argty4:ty,
-        $arg5: ident : $argty5:ty,
-        $arg6: ident : $argty6:ty
-    ) -> $ret:ty $body:block) => {
-        $crate::Closure {
-            variant: $crate::ClosureVariant::Six::<
-                $argty1,
-                $argty2,
-                $argty3,
-                $argty4,
-                $argty5,
-                $argty6,
-                (),
-                (),
-                $ret
-            >($crate::Closure6 {
-                wrapped: Box::new(|
-                    $arg1: $argty1,
-                    $arg2: $argty2,
-                    $arg3: $argty3,
-                    $arg4: $argty4,
-                    $arg5: $argty5,
-                    $arg6: $argty6
-                | -> $ret {
-                    $body
-                }),
-            }),
+impl<A, B, C, D, E, F, RET> Closure<A, B, C, D, E, F, (), (), RET> {
+    fn new_with_6_args(code: Box<dyn Fn(A, B, C, D, E, F) -> RET>) -> Closure<A, B, C, D, E, F, (), (), RET> {
+        Closure {
+            variant: ClosureVariant::Six(Closure6 {
+                wrapped: code,
+            })
         }
-    };
+    }
+}
 
-    (fn $fn:ident (
-        $arg1: ident : $argty1:ty,
-        $arg2: ident : $argty2:ty,
-        $arg3: ident : $argty3:ty,
-        $arg4: ident : $argty4:ty,
-        $arg5: ident : $argty5:ty,
-        $arg6: ident : $argty6:ty,
-        $arg7: ident : $argty7:ty
-    ) -> $ret:ty $body:block) => {
-        $crate::Closure {
-            variant: $crate::ClosureVariant::Seven::<
-                $argty1,
-                $argty2,
-                $argty3,
-                $argty4,
-                $argty5,
-                $argty6,
-                $argty7,
-                (),
-                $ret
-            >($crate::Closure7 {
-                wrapped: Box::new(|
-                    $arg1: $argty1,
-                    $arg2: $argty2,
-                    $arg3: $argty3,
-                    $arg4: $argty4,
-                    $arg5: $argty5,
-                    $arg6: $argty6,
-                    $arg7: $argty7
-                | -> $ret {
-                    $body
-                }),
-            }),
+impl<A, B, C, D, E, F, G, RET> Closure<A, B, C, D, E, F, G, (), RET> {
+    fn new_with_7_args(code: Box<dyn Fn(A, B, C, D, E, F, G) -> RET>) -> Closure<A, B, C, D, E, F, G, (), RET> {
+        Closure {
+            variant: ClosureVariant::Seven(Closure7 {
+                wrapped: code,
+            })
         }
-    };
+    }
+}
 
+impl<A, B, C, D, E, F, G, H, RET> Closure<A, B, C, D, E, F, G, H, RET> {
+    fn new_with_8_args(code: Box<dyn Fn(A, B, C, D, E, F, G, H) -> RET>) -> Closure<A, B, C, D, E, F, G, H, RET> {
+        Closure {
+            variant: ClosureVariant::Eight(Closure8 {
+                wrapped: code,
+            })
+        }
+    }
 }
 
 #[cfg(test)]
 mod tests {
+    use super::Closure;
+    use std::boxed::Box;
+
     #[test]
     fn it_works_0_args() {
-        let stored_closure = variadic_closure! {
-            fn foo() -> isize {
+        let stored_closure = Closure::new_with_0_args(
+            Box::new(|| -> isize {
                 3
-            }
-        };
+            })
+        );
         let result = stored_closure.call0();
 
         assert_eq!(result, 3);
@@ -474,11 +341,11 @@ mod tests {
 
     #[test]
     fn it_works_1_args() {
-        let stored_closure = variadic_closure! {
-            fn foo(a: i8) -> i32 {
+        let stored_closure = Closure::new_with_1_arg(
+            Box::new(|a: i8| -> i32 {
                 a as i32
-            }
-        };
+            })
+        );
         let result = stored_closure.call1(9);
 
         assert_eq!(result, 9);
@@ -486,11 +353,11 @@ mod tests {
 
     #[test]
     fn it_works_5_args() {
-        let stored_closure = variadic_closure! {
-            fn foo(a: i8, _b: (), _c: (), _d: (), e: i32, f: i8) -> i32 {
+        let stored_closure = Closure::new_with_6_args(
+            Box::new(|a: i8, _b: (), _c: (), _d: (), e: i32, f: i8| -> i32 {
                 a as i32 + e + f as i32
-            }
-        };
+            })
+        );
         let result = stored_closure.call6(1, (), (), (), 4, 3);
 
         assert_eq!(result, 8);
@@ -499,11 +366,11 @@ mod tests {
     #[test]
     #[should_panic]
     fn it_panics_wrong_args() {
-        let stored_closure = variadic_closure! {
-            fn foo() -> isize {
+        let stored_closure = Closure::new_with_0_args(
+            Box::new(|| -> i32 {
                 3
-            }
-        };
+            })
+        );
         stored_closure.call1(());
     }
 }
