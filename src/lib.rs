@@ -1,5 +1,5 @@
-pub struct Closure<A, B, C, D, E, F, RET> {
-    variant: ClosureVariant<A, B, C, D, E, F, RET>,
+pub struct Closure<A, B, C, D, E, F, G, H, RET> {
+    variant: ClosureVariant<A, B, C, D, E, F, G, H, RET>,
 }
 
 fn too_many(a: usize, b: usize) -> String {
@@ -16,7 +16,7 @@ fn too_few(a: usize, b: usize) -> String {
     )
 }
 
-impl<A, B, C, D, E, F, RET> Closure<A, B, C, D, E, F, RET> {
+impl<A, B, C, D, E, F, G, H, RET> Closure<A, B, C, D, E, F, G, H, RET> {
     pub fn arity(&self) -> usize {
         self.variant.arity()
     }
@@ -122,11 +122,53 @@ impl<A, B, C, D, E, F, RET> Closure<A, B, C, D, E, F, RET> {
                 panic!("{}", too_many(self.variant.arity(), provided))
             }
             ClosureVariant::Six(clos) => (*clos.wrapped)(a, b, c, d, e, f),
+            _ => {
+                panic!("{}", too_few(self.variant.arity(), provided))
+            }
         }
     }
+
+    pub fn call7(&self, a: A, b: B, c: C, d: D, e: E, f: F, g: G) -> RET {
+        let provided = 7;
+
+        match &self.variant {
+            ClosureVariant::Zero(_)
+            | ClosureVariant::One(_)
+            | ClosureVariant::Two(_)
+            | ClosureVariant::Three(_)
+            | ClosureVariant::Four(_)
+            | ClosureVariant::Five(_) => {
+                panic!("{}", too_many(self.variant.arity(), provided))
+            }
+            ClosureVariant::Six(clos) => (*clos.wrapped)(a, b, c, d, e, f),
+            ClosureVariant::Seven(clos) => (*clos.wrapped)(a, b, c, d, e, f, g),
+            _ => {
+                panic!("{}", too_few(self.variant.arity(), provided))
+            }
+        }
+    }
+
+    pub fn call8(&self, a: A, b: B, c: C, d: D, e: E, f: F, g: G, h: H) -> RET {
+        let provided = 8;
+
+        match &self.variant {
+            ClosureVariant::Zero(_)
+            | ClosureVariant::One(_)
+            | ClosureVariant::Two(_)
+            | ClosureVariant::Three(_)
+            | ClosureVariant::Four(_)
+            | ClosureVariant::Five(_) => {
+                panic!("{}", too_many(self.variant.arity(), provided))
+            }
+            ClosureVariant::Six(clos) => (*clos.wrapped)(a, b, c, d, e, f),
+            ClosureVariant::Seven(clos) => (*clos.wrapped)(a, b, c, d, e, f, g),
+            ClosureVariant::Eight(clos) => (*clos.wrapped)(a, b, c, d, e, f, g, h),
+        }
+    }
+
 }
 
-pub enum ClosureVariant<A, B, C, D, E, F, RET> {
+pub enum ClosureVariant<A, B, C, D, E, F, G, H, RET> {
     Zero(Closure0<RET>),
     One(Closure1<A, RET>),
     Two(Closure2<A, B, RET>),
@@ -134,9 +176,11 @@ pub enum ClosureVariant<A, B, C, D, E, F, RET> {
     Four(Closure4<A, B, C, D, RET>),
     Five(Closure5<A, B, C, D, E, RET>),
     Six(Closure6<A, B, C, D, E, F, RET>),
+    Seven(Closure7<A, B, C, D, E, F, G, RET>),
+    Eight(Closure8<A, B, C, D, E, F, G, H, RET>),
 }
 
-impl<A, B, C, D, E, F, RET> ClosureVariant<A, B, C, D, E, F, RET> {
+impl<A, B, C, D, E, F, G, H, RET> ClosureVariant<A, B, C, D, E, F, G, H, RET> {
     pub fn arity(&self) -> usize {
         match &self {
             ClosureVariant::Zero(_) => 0,
@@ -146,6 +190,8 @@ impl<A, B, C, D, E, F, RET> ClosureVariant<A, B, C, D, E, F, RET> {
             ClosureVariant::Four(_) => 4,
             ClosureVariant::Five(_) => 5,
             ClosureVariant::Six(_) => 6,
+            ClosureVariant::Seven(_) => 7,
+            ClosureVariant::Eight(_) => 8,
         }
     }
 }
@@ -178,45 +224,106 @@ pub struct Closure6<A, B, C, D, E, F, RET> {
     wrapped: Box<dyn Fn(A, B, C, D, E, F) -> RET>,
 }
 
+pub struct Closure7<A, B, C, D, E, F, G, RET> {
+    wrapped: Box<dyn Fn(A, B, C, D, E, F, G) -> RET>,
+}
+
+pub struct Closure8<A, B, C, D, E, F, G, H, RET> {
+    wrapped: Box<dyn Fn(A, B, C, D, E, F, G, H) -> RET>,
+}
+
 #[macro_export]
 macro_rules! variadic_closure {
     ( fn $fn:ident ( ) -> $ret:ty $body:block ) => {
         $crate::Closure {
-            variant: $crate::ClosureVariant::Zero::<(), (), (), (), (), (), $ret>($crate::Closure0 {
-                wrapped: Box::new(|| -> $ret { $body }),
-            }),
+            variant: $crate::ClosureVariant::Zero::<(), (), (), (), (), (), (), (), $ret>(
+                $crate::Closure0 {
+                    wrapped: Box::new(|| -> $ret {
+                        $body
+                    }),
+                }
+            ),
         }
     };
+
     ( fn $fn:ident (
         $arg1: ident : $argty1:ty
     ) -> $ret:ty $body:block ) => {
         $crate::Closure {
-            variant: $crate::ClosureVariant::One::<$argty1, (), (), (), (), (), $ret>($crate::Closure1 {
-                wrapped: Box::new(|$arg1 : $argty1| -> $ret { $body }),
+            variant: $crate::ClosureVariant::One::<
+                $argty1,
+                (),
+                (),
+                (),
+                (),
+                (),
+                (),
+                (),
+                $ret
+            >($crate::Closure1 {
+                wrapped: Box::new(|
+                    $arg1: $argty1
+                | -> $ret {
+                    $body
+                }),
             }),
         }
     };
+
     ( fn $fn:ident (
         $arg1: ident : $argty1:ty,
         $arg2: ident : $argty2:ty
     ) -> $ret:ty $body:block ) => {
         $crate::Closure {
-            variant: $crate::ClosureVariant::Two::<$argty1, $argty2, (), (), (), (), $ret>($crate::Closure2 {
-                wrapped: Box::new(|$arg1 : $argty1 , $arg2: $argty2| -> $ret { $body }),
+            variant: $crate::ClosureVariant::Two::<
+                $argty1,
+                $argty2,
+                (),
+                (),
+                (),
+                (),
+                (),
+                (),
+                $ret
+            >($crate::Closure2 {
+                wrapped: Box::new(|
+                    $arg1: $argty1,
+                    $arg2: $argty2
+                | -> $ret {
+                    $body
+                }),
             }),
         }
     };
+
     ( fn $fn:ident (
         $arg1: ident : $argty1:ty,
         $arg2: ident : $argty2:ty,
         $arg3: ident : $argty3:ty
     ) -> $ret:ty $body:block ) => {
         $crate::Closure {
-            variant: $crate::ClosureVariant::Three::<$argty1, $argty2, $argty3, (), (), (), $ret>($crate::Closure3 {
-                wrapped: Box::new(|$arg1 : $argty1 , $arg2: $argty2, $arg3 : $argty3| -> $ret { $body }),
+            variant: $crate::ClosureVariant::Three::<
+                $argty1,
+                $argty2,
+                $argty3,
+                (),
+                (),
+                (),
+                (),
+                (),
+                $ret
+            >($crate::Closure3 {
+                wrapped: Box::new(|
+                    $arg1: $argty1,
+                    $arg2: $argty2,
+                    $arg3: $argty3
+                | -> $ret {
+                    $body
+                }),
             }),
         }
     };
+
     ( fn $fn:ident (
         $arg1: ident : $argty1:ty,
         $arg2: ident : $argty2:ty,
@@ -224,11 +331,29 @@ macro_rules! variadic_closure {
         $arg4: ident : $argty4:ty
     ) -> $ret:ty $body:block ) => {
         $crate::Closure {
-            variant: $crate::ClosureVariant::Four::<$argty1, $argty2, $argty3, $argty4, (), (), $ret>($crate::Closure4 {
-                wrapped: Box::new(|$arg1 : $argty1 , $arg2: $argty2, $arg3 : $argty3, $arg4 : $argty4| -> $ret { $body }),
+            variant: $crate::ClosureVariant::Four::<
+                $argty1,
+                $argty2,
+                $argty3,
+                $argty4,
+                (),
+                (),
+                (),
+                (),
+                $ret
+            >($crate::Closure4 {
+                wrapped: Box::new(|
+                    $arg1: $argty1,
+                    $arg2: $argty2,
+                    $arg3: $argty3,
+                    $arg4: $argty4
+                | -> $ret {
+                    $body
+                }),
             }),
         }
     };
+
     ( fn $fn:ident (
         $arg1: ident : $argty1:ty,
         $arg2: ident : $argty2:ty,
@@ -237,11 +362,30 @@ macro_rules! variadic_closure {
         $arg5: ident : $argty5:ty
     ) -> $ret:ty $body:block ) => {
         $crate::Closure {
-            variant: $crate::ClosureVariant::Five::<$argty1, $argty2, $argty3, $argty4, $argty5, (), $ret>($crate::Closure5 {
-                wrapped: Box::new(|$arg1 : $argty1 , $arg2: $argty2, $arg3 : $argty3, $arg4 : $argty4, $arg5 : $argty5| -> $ret { $body }),
+            variant: $crate::ClosureVariant::Five::<
+                $argty1,
+                $argty2,
+                $argty3,
+                $argty4,
+                $argty5,
+                (),
+                (),
+                (),
+                $ret
+            >($crate::Closure5 {
+                wrapped: Box::new(|
+                    $arg1: $argty1,
+                    $arg2: $argty2,
+                    $arg3: $argty3,
+                    $arg4: $argty4,
+                    $arg5: $argty5
+                | -> $ret {
+                    $body
+                }),
             }),
         }
     };
+
     ( fn $fn:ident (
         $arg1: ident : $argty1:ty,
         $arg2: ident : $argty2:ty,
@@ -251,11 +395,67 @@ macro_rules! variadic_closure {
         $arg6: ident : $argty6:ty
     ) -> $ret:ty $body:block ) => {
         $crate::Closure {
-            variant: $crate::ClosureVariant::Six::<$argty1, $argty2, $argty3, $argty4, $argty5, $argty6, $ret>($crate::Closure6 {
-                wrapped: Box::new(|$arg1 : $argty1 , $arg2: $argty2, $arg3 : $argty3, $arg4 : $argty4, $arg5 : $argty5, $arg6 : $argty6| -> $ret { $body }),
+            variant: $crate::ClosureVariant::Six::<
+                $argty1,
+                $argty2,
+                $argty3,
+                $argty4,
+                $argty5,
+                $argty6,
+                (),
+                (),
+                $ret
+            >($crate::Closure6 {
+                wrapped: Box::new(|
+                    $arg1: $argty1,
+                    $arg2: $argty2,
+                    $arg3: $argty3,
+                    $arg4: $argty4,
+                    $arg5: $argty5,
+                    $arg6: $argty6
+                | -> $ret {
+                    $body
+                }),
             }),
         }
     };
+
+    ( fn $fn:ident (
+        $arg1: ident : $argty1:ty,
+        $arg2: ident : $argty2:ty,
+        $arg3: ident : $argty3:ty,
+        $arg4: ident : $argty4:ty,
+        $arg5: ident : $argty5:ty,
+        $arg6: ident : $argty6:ty,
+        $arg7: ident : $argty7:ty
+    ) -> $ret:ty $body:block ) => {
+        $crate::Closure {
+            variant: $crate::ClosureVariant::Seven::<
+                $argty1,
+                $argty2,
+                $argty3,
+                $argty4,
+                $argty5,
+                $argty6,
+                $argty7,
+                (),
+                $ret
+            >($crate::Closure7 {
+                wrapped: Box::new(|
+                    $arg1: $argty1,
+                    $arg2: $argty2,
+                    $arg3: $argty3,
+                    $arg4: $argty4,
+                    $arg5: $argty5,
+                    $arg6: $argty6,
+                    $arg7: $argty7
+                | -> $ret {
+                    $body
+                }),
+            }),
+        }
+    };
+
 }
 
 #[cfg(test)]
