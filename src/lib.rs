@@ -234,7 +234,7 @@ pub struct Closure8<A, B, C, D, E, F, G, H, RET> {
 
 #[macro_export]
 macro_rules! variadic_closure {
-    ( fn $fn:ident ( ) -> $ret:ty $body:block ) => {
+    (fn $fn:ident ( ) -> $ret:ty $body:block) => {
         $crate::Closure {
             variant: $crate::ClosureVariant::Zero::<(), (), (), (), (), (), (), (), $ret>(
                 $crate::Closure0 {
@@ -246,9 +246,9 @@ macro_rules! variadic_closure {
         }
     };
 
-    ( fn $fn:ident (
+    (fn $fn:ident (
         $arg1: ident : $argty1:ty
-    ) -> $ret:ty $body:block ) => {
+    ) -> $ret:ty $body:block) => {
         $crate::Closure {
             variant: $crate::ClosureVariant::One::<
                 $argty1,
@@ -270,10 +270,10 @@ macro_rules! variadic_closure {
         }
     };
 
-    ( fn $fn:ident (
+    (fn $fn:ident (
         $arg1: ident : $argty1:ty,
         $arg2: ident : $argty2:ty
-    ) -> $ret:ty $body:block ) => {
+    ) -> $ret:ty $body:block) => {
         $crate::Closure {
             variant: $crate::ClosureVariant::Two::<
                 $argty1,
@@ -296,11 +296,11 @@ macro_rules! variadic_closure {
         }
     };
 
-    ( fn $fn:ident (
+    (fn $fn:ident (
         $arg1: ident : $argty1:ty,
         $arg2: ident : $argty2:ty,
         $arg3: ident : $argty3:ty
-    ) -> $ret:ty $body:block ) => {
+    ) -> $ret:ty $body:block) => {
         $crate::Closure {
             variant: $crate::ClosureVariant::Three::<
                 $argty1,
@@ -324,12 +324,12 @@ macro_rules! variadic_closure {
         }
     };
 
-    ( fn $fn:ident (
+    (fn $fn:ident (
         $arg1: ident : $argty1:ty,
         $arg2: ident : $argty2:ty,
         $arg3: ident : $argty3:ty,
         $arg4: ident : $argty4:ty
-    ) -> $ret:ty $body:block ) => {
+    ) -> $ret:ty $body:block) => {
         $crate::Closure {
             variant: $crate::ClosureVariant::Four::<
                 $argty1,
@@ -354,13 +354,13 @@ macro_rules! variadic_closure {
         }
     };
 
-    ( fn $fn:ident (
+    (fn $fn:ident (
         $arg1: ident : $argty1:ty,
         $arg2: ident : $argty2:ty,
         $arg3: ident : $argty3:ty,
         $arg4: ident : $argty4:ty,
         $arg5: ident : $argty5:ty
-    ) -> $ret:ty $body:block ) => {
+    ) -> $ret:ty $body:block) => {
         $crate::Closure {
             variant: $crate::ClosureVariant::Five::<
                 $argty1,
@@ -386,14 +386,14 @@ macro_rules! variadic_closure {
         }
     };
 
-    ( fn $fn:ident (
+    (fn $fn:ident (
         $arg1: ident : $argty1:ty,
         $arg2: ident : $argty2:ty,
         $arg3: ident : $argty3:ty,
         $arg4: ident : $argty4:ty,
         $arg5: ident : $argty5:ty,
         $arg6: ident : $argty6:ty
-    ) -> $ret:ty $body:block ) => {
+    ) -> $ret:ty $body:block) => {
         $crate::Closure {
             variant: $crate::ClosureVariant::Six::<
                 $argty1,
@@ -420,7 +420,7 @@ macro_rules! variadic_closure {
         }
     };
 
-    ( fn $fn:ident (
+    (fn $fn:ident (
         $arg1: ident : $argty1:ty,
         $arg2: ident : $argty2:ty,
         $arg3: ident : $argty3:ty,
@@ -428,7 +428,7 @@ macro_rules! variadic_closure {
         $arg5: ident : $argty5:ty,
         $arg6: ident : $argty6:ty,
         $arg7: ident : $argty7:ty
-    ) -> $ret:ty $body:block ) => {
+    ) -> $ret:ty $body:block) => {
         $crate::Closure {
             variant: $crate::ClosureVariant::Seven::<
                 $argty1,
